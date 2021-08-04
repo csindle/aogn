@@ -14,8 +14,6 @@ pip install aogn
 
 ## Usage
 
-Please see `example.py` for a concurrent example.
-
 Simple example:
 
 ```python
@@ -51,3 +49,5 @@ if __name__ == '__main__':
     asyncio.run(example())
 
 ```
+
+Please see `example_with_ogn_client.py` for a concurrent example.
