@@ -1,9 +1,16 @@
-# aogn
+## Introduction
 
 Asynchronous OGN ([Open Glider Network](http://wiki.glidernet.org/)) Client for asyncio and Python that receives the 
 planes', gliders', receivers', etc. APRS messages.
 
-Use a library like [python-ogn-client's](https://github.com/glidernet/python-ogn-client) `ogn.parser.parse` to interpret these messages.
+Asynchronicity allows a single listener script to execute concurrently other useful tasks
+like inserting records into a database, computing aggregate statistics, making web requests,
+etc., since there is no blocking function (e.g. `listen()` or `run_forever()`) and 
+no callbacks.
+
+
+To interpret the raw OGN messages, use a function like
+[python-ogn-client's](https://github.com/glidernet/python-ogn-client) `ogn.parser.parse`.
 
 
 ## Installation
@@ -14,33 +21,20 @@ pip install aogn
 
 ## Usage
 
-Simple example:
+Basic example:
 
 ```python
 import asyncio
-import logging
-import sys
-
-logging.basicConfig(
-    stream=sys.stdout,
-    level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s %(module)s %(message)s',
-    datefmt='%b %d %H:%M:%S',
-)
 
 from aogn import Client
 
 
 async def example() -> None:
-    conn = Client(aprs_user='NO-CALL', )
-
-    try:
-        while True:
-            # Get the APRS packet once available:
-            raw_message = await conn.packet()
-            logging.debug(raw_message)
-    except KeyboardInterrupt:
-        logging.info('OGN Gateway stopped.')
+    conn = Client(aprs_user='NO-CALL')
+    while True:
+        # Get the APRS packet once available:
+        raw_message = await conn.packet()
+        print(raw_message)
 
     await conn.disconnect()
 

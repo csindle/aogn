@@ -19,7 +19,7 @@ async def example() -> None:
         while True:
             # Get the APRS packet once available:
             raw_message = await conn.packet()
-            logging.debug(raw_message)
+            #logging.debug(raw_message)
     except KeyboardInterrupt:
         logging.info('OGN Gateway stopped.')
 
