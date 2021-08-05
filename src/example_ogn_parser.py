@@ -1,7 +1,9 @@
-
 import asyncio
 import logging
 import sys
+
+import aogn
+from ogn.parser import parse, ParseError
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -10,19 +12,13 @@ logging.basicConfig(
     datefmt='%b %d %H:%M:%S',
 )
 
-from aogn import Client
-
-from ogn.parser import parse, ParseError
-
 
 def process_beacon(raw_message):
     beacon = {}
     try:
         beacon = parse(raw_message)
-        ## beacon = parse("FLRDD4F67>OGFLR,qAS,HusBos:/121531h5226.91N/00101.31W'201/037/A=001618 !W42! id06DD")
-        ## Causes: AttributeError: 'NoneType' object has no attribute 'group'
-
-        #print('Received {aprs_type}: {raw_message}'.format(**beacon))
+        #logging.debug(f'beacon: f{beacon}')
+        #logging.debug('Received {aprs_type}: {raw_message}'.format(**beacon))
     except ParseError as err:
         logging.warning(f'ParseError: {err}')
     except NotImplementedError as err:
@@ -35,7 +31,7 @@ def process_beacon(raw_message):
 
 
 async def example() -> None:
-    conn = Client(aprs_user='NO-CALL', )  # aprs_filter='t/s')
+    conn = aogn.Client(aprs_user='NO-CALL', )  # aprs_filter='t/s')
 
     try:
         while True:
@@ -52,7 +48,7 @@ async def another_io_function() -> None:
     import random
 
     while True:
-        sleep_duration = 240 * random.random()
+        sleep_duration = 120 * random.random()
         logging.debug(f'Concurrently sleeping for {sleep_duration:.0f} seconds...')
         await asyncio.sleep(sleep_duration)
 

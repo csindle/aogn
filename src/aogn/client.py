@@ -15,7 +15,8 @@ def create_aprs_login(user_name, pass_code, app_name, app_version, aprs_filter=N
 
 
 def get_sock_peer_ip(writer):
-    if sock := writer.get_extra_info('socket'):
+    sock = writer.get_extra_info('socket')
+    if sock:
         return sock.getpeername()[0]
     return None
 
@@ -65,7 +66,8 @@ class Client:
         Send KeepAlive packet if necessary. _writer must be connected.
         :return Whether or not one was sent.
         """
-        if (now := time.perf_counter()) - self._keepalive_last_sent > settings.APRS_KEEPALIVE_TIME:
+        now = time.perf_counter()
+        if (now - self._keepalive_last_sent) > settings.APRS_KEEPALIVE_TIME:
             logging.debug('Sending keepalive to {}'.format(get_sock_peer_ip(self._writer)))
             self._writer.write('#keepalive\n'.encode())
             await self._writer.drain()
